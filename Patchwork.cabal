@@ -1,0 +1,54 @@
+name:                Patchwork
+version:             0.1.0.0
+synopsis:            Patchwork parser and drawing
+description:         Please see README.md
+homepage:            https://github.com/guibou/Patchwork#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Guillaume Bouchard
+maintainer:          guillaum.bouchard@gmail.com
+copyright:           2015-2016 Guillaume Bouchard
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Patchwork
+                     , Patchwork.Ast
+                     , Patchwork.Parser
+                     , Patchwork.Diagram
+  build-depends:       base >= 4.7 && < 5
+                     , Earley
+                     , diagrams-lib
+                     , diagrams-svg
+                     , containers
+  default-language:    Haskell2010
+
+
+executable Patchwork-exe
+  hs-source-dirs:      app
+  main-is:             TestDiagrams.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , Patchwork
+                     , diagrams-lib
+                     , diagrams-svg
+                     , containers
+                     , here
+  default-language:    Haskell2010
+
+test-suite Patchwork-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , Patchwork2
+                     , containers
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/guibou/Patchwork

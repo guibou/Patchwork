@@ -30,9 +30,16 @@ rep :: Int -> Diagram B -> Diagram B
 rep 1 d = d
 rep n d = d ||| (rep (n-1) d)
 
+defaultDiags :: Map.Map Ident (Diagram B)
+defaultDiags = Map.fromList [
+  (Ident "a", diagA),
+  (Ident "b", diagB),
+  (Ident "c", diagC),
+  (Ident "d", diagD)]
+
 -- evaluate a list of instruction to a diagram. returns `Nothing` on failure
 getDiagram :: [Instruction] -> Maybe (Diagram B)
-getDiagram instr = go (Map.empty) instr -- the map stores the current saved diagrams
+getDiagram instr = go defaultDiags instr -- the map stores the current saved diagrams
   where
     go _ [] = Nothing
     go m (x:xs) = case x of
@@ -47,10 +54,5 @@ getDiagram instr = go (Map.empty) instr -- the map stores the current saved diag
 evalDraw :: Map.Map Ident (Diagram B) -> Draw -> Maybe (Diagram B)
 evalDraw m (Repeat d n) = rep n <$> (evalDraw m d)
 evalDraw m (Rotate d) = rot <$> evalDraw m d
-evalDraw _ (Patchwork.Ast.Prim p) = Just $ case p of
-  A -> diagA
-  B -> diagB
-  C -> diagC
-  D -> diagD
 evalDraw m (Id name) = Map.lookup name m
 evalDraw m (Concat a b) = liftA2 (|||) (evalDraw m a) (evalDraw m b)

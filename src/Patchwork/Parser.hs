@@ -19,18 +19,11 @@ grammar = mdo
     <|> sym "def" *> (Def <$> (ident <* sym "=") <*> draw)
 
   draw <- E.rule $
-        Prim <$> primitive
-    <|> Id <$> ident
+        Id <$> ident
     <|> sym "(" *> draw <* sym ")"
     <|> Concat <$> draw <*> (sym "+" *> draw)
     <|> Rotate <$> (sym "rot" *> draw)
     <|> Repeat <$> draw <*> (sym "[" *> int <* sym "]")
-
-  primitive <- E.rule $
-        A <$ sym "a"
-    <|> B <$ sym "b"
-    <|> C <$ sym "c"
-    <|> D <$ sym "d"
 
   -- lexing
   let tok p   = (many $ E.satisfy isSpace) *> p
